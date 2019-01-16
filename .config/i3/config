@@ -1,0 +1,238 @@
+# Font
+font pango:Noto Sans Bold 9
+
+# Focus behaviour
+focus_follows_mouse no
+
+# Modifier key
+set $mod Mod4
+
+# Use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
+
+# Start a terminal
+bindsym $mod+Return exec terminator
+
+# Start a file manager
+bindsym $mod+Shift+f exec thunar
+
+# Log out
+bindsym Control+mod+Delete exec gdm-x-session
+
+# Lock
+bindsym $mod+Control+l exec gnome-screensaver-command --lock
+
+# Pick a new screen layout
+bindsym $mod+Shift+s exec screenlayout-menu
+
+# Close window
+bindsym $mod+Shift+q kill
+
+# Start rofi
+bindsym $mod+Shift+d exec rofi -show run -theme "/rofi/themes/}/flat-orange.rasi"
+bindsym $mod+space exec rofi -show drun -theme "/rofi/themes/}/flat-orange.rasi"
+bindsym $mod+Tab exec rofi -show window -theme "/rofi/themes/}/flat-orange.rasi"
+
+# Change focus
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# Move focused window
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+# Enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen
+
+# Change container layout
+bindsym $mod+t layout tabbed
+bindsym $mod+s layout toggle split
+bindsym $mod+v split h
+bindsym $mod+Shift+V split v
+
+# Toggle tiling/floating
+bindsym $mod+Shift+p floating toggle
+
+# Change focus between tiling/floating windows
+bindsym $mod+p focus mode_toggle
+
+# Focus the parent container
+bindsym $mod+a focus parent
+
+# Focus the child container
+bindsym $mod+d focus child
+
+# Switch screen of workspace
+bindsym $mod+Shift+o move workspace to output left
+bindsym $mod+o move workspace to output right
+
+# Reload the configuration file
+bindsym $mod+Shift+c reload
+
+# Restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+
+# Resize window mode
+mode "resize" {
+    bindsym h resize shrink width 10 px or 10 ppt
+    bindsym j resize grow height 10 px or 10 ppt
+    bindsym k resize shrink height 10 px or 10 ppt
+    bindsym l resize grow width 10 px or 10 ppt
+    bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+# Window decorations
+new_window pixel
+hide_edge_borders smart
+
+# Colours and style
+exec_always --no-startup-id "xsetroot -solid '#333333'"
+client.focused #526532 #526532 #ffffff #a4cb64
+client.focused_inactive #aea79f #aea79f #3c3b37 #aea79f
+client.unfocused #3c3b37 #3c3b37 #aea79f #3c3b37
+client.urgent #FF0000 #FF0000 #ffffff #FF0000
+exec --no-startup-id /usr/bin/lxpolkit &
+exec --no-startup-id compton --config ~/.config/compton.conf -b &
+exec --no-startup-id setxkbmap -layout 'us,bg(phonetic)' -option 'grp:alt_shift_toggle' &
+exec --no-startup-id nm-applet &
+exec --no-startup-id synergy &
+exec --no-startup-id blueman-applet &
+exec xrandr --output eDP-1 --mode 1920x1080
+
+
+set $Locker i3lock-fancy -p && sleep 1
+
+set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
+mode "$mode_system" {
+    bindsym l exec --no-startup-id i3lock-fancy -p && sleep 1, mode "default"
+    bindsym e exec --no-startup-id i3-msg exit, mode "default"
+    bindsym s exec --no-startup-id $Locker && systemctl suspend, mode "default"
+    bindsym h exec --no-startup-id $Locker && systemctl hibernate, mode "default"
+    bindsym r exec --no-startup-id systemctl reboot, mode "default"
+    bindsym Shift+s exec --no-startup-id systemctl poweroff -i, mode "default"  
+
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+# Screen brightness controls with notification
+bindsym XF86MonBrightnessUp exec "light -A 5; notify-send 'brightness up'"
+bindsym XF86MonBrightnessDown exec "light -U 5; notify-send 'brightness down'"
+
+# Sound control
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl -- set-sink-volume 0 +10%
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl -- set-sink-volume 0 -10%
+bindsym XF86AudioMute exec --no-startup-id pactl -- set-sink-mute 0 toggle
+
+#title requires - i3ipc-python-git-latest
+bar {
+    status_command  ~/.config/bumblebee-status/bumblebee-status -m title spacer spacer cpu memory nic amixer brightness battery date time layout -p time.format="%H:%M CW %V" date.format="%a, %b %d %Y" layout.lang=us battery.warning=25 battery.critical=18 interval=5 -t solarized
+    font pango: xos4 Terminus 12
+    position          bottom
+    tray_output       primary
+
+    colors {
+        separator #ffffff
+        background #3c3b37
+        statusline #ffffff
+        focused_workspace #526532 #526532 #ffffff
+        active_workspace #aea79f #aea79f #3c3b37
+        inactive_workspace #3c3b37 #3c3b37 #aea79f
+        urgent_workspace #FF0000 #FF0000 #ffffff
+    }
+}
+
+###
+# Workspaces
+
+# Workspace 1
+set $workspace_1 1
+bindsym $mod+1 workspace $workspace_1
+bindsym $mod+Shift+1 move container to workspace $workspace_1
+
+# Workspace 2
+set $workspace_2 2
+bindsym $mod+2 workspace $workspace_2
+bindsym $mod+Shift+2 move container to workspace $workspace_2
+
+# Workspace 3
+set $workspace_3 3
+bindsym $mod+3 workspace $workspace_3
+bindsym $mod+Shift+3 move container to workspace $workspace_3
+
+# Workspace 4
+set $workspace_4 4
+bindsym $mod+4 workspace $workspace_4
+bindsym $mod+Shift+4 move container to workspace $workspace_4
+
+# Workspace 5
+set $workspace_5 5
+bindsym $mod+5 workspace $workspace_5
+bindsym $mod+Shift+5 move container to workspace $workspace_5
+
+# Workspace 6
+set $workspace_6 6
+bindsym $mod+6 workspace $workspace_6
+bindsym $mod+Shift+6 move container to workspace $workspace_6
+
+# Workspace 7
+set $workspace_7 7
+bindsym $mod+7 workspace $workspace_7
+bindsym $mod+Shift+7 move container to workspace $workspace_7
+
+# Workspace 8
+set $workspace_8 8
+bindsym $mod+8 workspace $workspace_8
+bindsym $mod+Shift+8 move container to workspace $workspace_8
+
+# Workspace 9
+set $workspace_9 9
+bindsym $mod+9 workspace $workspace_9
+bindsym $mod+Shift+9 move container to workspace $workspace_9
+
+# Workspace 10
+set $workspace_10 10
+bindsym $mod+0 workspace $workspace_10
+bindsym $mod+Shift+0 move container to workspace $workspace_10
+
+# Workspace IDE
+set $workspace_ide IDE
+bindsym $mod+e workspace $workspace_ide
+bindsym $mod+Shift+e move container to workspace $workspace_ide
+assign [class="^visual-stu$"] $workspace_ide
+assign [class="^sublime-te$"] $workspace_ide
+
+# Workspace WWW
+set $workspace_www WWW
+bindsym $mod+w workspace $workspace_www
+bindsym $mod+Shift+w move container to workspace $workspace_www
+assign [class="^Firefox$"] $workspace_www
+assign [class="^Chromium-bro$"] $workspace_www
+
+# Workspace Mail
+set $workspace_mail Mail
+bindsym $mod+m workspace $workspace_mail
+bindsym $mod+Shift+m move container to workspace $workspace_mail
+assign [class="^Thunderbird$"] $workspace_mail
+
+# Workspace IM
+set $workspace_im IM
+bindsym $mod+i workspace $workspace_im
+bindsym $mod+Shift+i move container to workspace $workspace_im
+assign [class="^Skype$"] $workspace_im
+assign [class="^Sky$"] $workspace_im
+assign [class="^Slack$"] $workspace_im
+assign [class="^Vibe$"] $workspace_im
+assign [class="^KeePass$"] $workspace_im
+
+# Workspace VM
+set $workspace_vm VM
+bindsym $mod+b workspace $workspace_vm
+bindsym $mod+Shift+b move container to workspace $workspace_vm
+assign [class="^VirtualBox"] $workspace_vm
